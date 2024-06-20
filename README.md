@@ -5,4 +5,7 @@ A little web game
 
 目前看起來使用上不影響，可能是編寫程式時才會用到。
 
+
+開始時有音效，如果在公眾場合，記得先靜音。
+
 網站地址：https://littleblackcap.github.io/LittleHeart/
