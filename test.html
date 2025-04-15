@@ -1,0 +1,67 @@
+<!-- 必須用go server開不然瀏覽器會擋 -->
+<!-- 目前測試退場動畫 -->
+<!-- 目前移動路徑和方式都不太對 -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Test Exit Animation</title>
+</head>
+
+<body>
+    <canvas id="game"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- <script type="module">
+        import Animation from './dist/bundle.js';
+    </script> -->
+
+    <script type="module">
+        import Animation from './src/animation.js';
+
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        const animation = new Animation(canvas);
+
+        // 只建立 group，不執行任何動畫
+        animation.initHeartGroup();
+
+        // 直接進行退場動畫
+        animation.endAnimation(() => {
+            ctx.font = '60px Cubic_11';
+            ctx.fillStyle = 'white';
+            ctx.fillText("You lose....", canvas.width / 2, canvas.height / 9 * 6);
+            console.log('Exit animation finished!');
+        });
+
+    </script>
+
+    <style>
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0, 0, 0);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        @font-face {
+            font-family: 'Cubic_11';
+            src: url('../font/Cubic_11_1.100_R.woff2') format('woff2'),
+                url('../font/Cubic_11_1.100_R.woff') format('woff');
+        }
+    </style>
+</body>
+
+</html>

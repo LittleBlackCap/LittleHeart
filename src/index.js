@@ -135,9 +135,9 @@ const home = function () {
 }
 
 // 遊戲前的小動畫
-animation.createHeartAnimation(onHeartAnimationComplete); // 呼叫建立心形動畫的函數
+animation.startAnimation(onHeartAnimationComplete); // 呼叫建立心形動畫的函數
 function onHeartAnimationComplete() {
-    // console.log('createHeartAnimation is Completed.');
+    // console.log('startAnimation is Completed.');
     requestId = requestAnimationFrame(gameLoop); //  迴圈開始的入口
 }
 
@@ -145,7 +145,10 @@ function onHeartAnimationComplete() {
 function gameLoop() {
     clearCanvas(canvas);
     if (init) beforeStart();
-    if (over) isOver();
+    if (over) {
+        // 補上小心心裂成兩半的動畫
+        animation.endAnimation(isOver)
+    }
     if (modeSwitch.mode !== 'mode0') {
         if (heart.life === 0) {
             over = true;
@@ -259,8 +262,6 @@ function isOver() { // 輸了的結果畫面
     square.animationStartTime = null;
     // console.log("set null");
     // 上面這東東好像沒用
-
-    // 要補上小心心裂成兩半的動畫
 
     ctx.font = '60px Cubic_11';
     ctx.fillStyle = 'white';
