@@ -36,6 +36,7 @@ import Heart from './heart.js';
 import Square from './square.js';
 import Attack from './attack.js';
 import Animation from './animation.js';
+import './style.css';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');

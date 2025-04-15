@@ -9,3 +9,5 @@ A little web game
 開始時有音效，如果在公眾場合，記得先靜音。
 
 網站地址：https://littleblackcap.github.io/LittleHeart/
+
+(具體邏輯看src/index.js，避免我失憶)
