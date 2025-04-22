@@ -11,3 +11,5 @@ A little web game
 網站地址：https://littleblackcap.github.io/LittleHeart/
 
 (具體邏輯看src/index.js，避免我失憶)
+
+(我試圖改回來沒亂加動畫的時候，但github這邊一直改不回來Q)
