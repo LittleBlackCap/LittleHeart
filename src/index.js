@@ -21,12 +21,10 @@
   我加了，但有點怪，目前無法和原本的canvas接在一起
 2.要加入失敗動畫，預計用three.js讓我們的小心心放大裂開(然後我就不知道了)
 3.要加入切換模式動畫，讓框框的變化是連續的，等框框變化完才會開始攻擊
-  姑且算是可以，但只有兩個模式切換間能成功，而且變化結束會有奇妙的停頓，我不知道為什麼，而且它們好像是真的持續到那時候才結束，我不理解
+  姑且算是可以，但只有兩個模式切換間能成功，而且變化結束會有奇妙的停頓，我不知道為什麼
 4.希望可以加入藍色攻擊(只要不動就可以不會扣血)
 5.Music按鍵可以再逗趣一點
 6.攻擊方式再還原(原作)一點 
-7.開頭的螢光字幕不太紅感覺怪怪的，以及想加會閃爍的特效 !
-8.遊戲首頁的那些字如果可以被撞開就更好玩了；遊戲中的Don't那句可以抖抖抖(很原著)
 */
 
 // 儲存變更方式是在"D:\tool\workspace\HTML\WWW programing\Project"輸入"npx webpack"
@@ -135,9 +133,9 @@ const home = function () {
 }
 
 // 遊戲前的小動畫
-animation.startAnimation(onHeartAnimationComplete); // 呼叫建立心形動畫的函數
+animation.createHeartAnimation(onHeartAnimationComplete); // 呼叫建立心形動畫的函數
 function onHeartAnimationComplete() {
-    // console.log('startAnimation is Completed.');
+    // console.log('createHeartAnimation is Completed.');
     requestId = requestAnimationFrame(gameLoop); //  迴圈開始的入口
 }
 
@@ -145,10 +143,7 @@ function onHeartAnimationComplete() {
 function gameLoop() {
     clearCanvas(canvas);
     if (init) beforeStart();
-    if (over) {
-        // 補上小心心裂成兩半的動畫
-        animation.endAnimation(isOver)
-    }
+    if (over) isOver();
     if (modeSwitch.mode !== 'mode0') {
         if (heart.life === 0) {
             over = true;
@@ -168,6 +163,7 @@ function gameLoop() {
                 if (!collided && collide(modeSwitch.mode, attack.update(), heart.update())) {
                     heart.life--;
                     attacks.splice(index, 1);
+                    attack.xs_mode2 = []; // 删除相同索引位置的 x 坐标
                     attacks.push(new Attack(canvas, ctx, modeSwitch.mode)); // 看能不能改一下，換成重複利用的方式生成，比如撞到或是超出界線之後重新random出初始位置
                     collided = true;
                     collidedSound.play();
@@ -262,6 +258,8 @@ function isOver() { // 輸了的結果畫面
     square.animationStartTime = null;
     // console.log("set null");
     // 上面這東東好像沒用
+
+    // 要補上小心心裂成兩半的動畫
 
     ctx.font = '60px Cubic_11';
     ctx.fillStyle = 'white';
