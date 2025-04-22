@@ -41,7 +41,7 @@ export default class Animation {
         this.infoElement.style.fontFamily = 'Cubic_11';
         this.infoElement.style.color = 'white';
         this.infoElement.style.fontSize = '24px';
-        this.infoElement.style.textShadow =
+        this.infoElement.style.textShadow = 
             /* White glow */
             '0 0 7px white',
             '0 0 10px white',
@@ -68,7 +68,8 @@ export default class Animation {
         });
     }
 
-    initHeartGroup() {
+    createHeartAnimation(onComplete) {
+        this.append();
         this.heartPixels = [
             [0, 0, 3, 5, 5, 3, 0, 0, 0, 0, 0, 3, 5, 5, 3, 0, 0],
             [0, 3, 7, 7, 7, 7, 5, 0, 0, 0, 5, 7, 7, 7, 7, 3, 0],
@@ -118,14 +119,6 @@ export default class Animation {
         this.scene.add(this.heartGroup); // 將群組加入場景
         // console.log(this.numCube);
         // console.log(this.scene.children);
-    }
-
-
-    startAnimation(onComplete) {
-        document.body.appendChild(this.renderer.domElement);
-        document.body.appendChild(this.infoElement);
-
-        this.initHeartGroup();
 
         const animate = () => {
             this.requestID = requestAnimationFrame(animate);
@@ -155,8 +148,7 @@ export default class Animation {
                 if (sizeInPixels <= targetSizeInPixels) {
                     // console.log(sizeInPixels, targetSizeInPixels);
                     cancelAnimationFrame(this.requestID);
-                    document.body.removeChild(this.renderer.domElement);
-                    document.body.removeChild(this.infoElement);
+                    this.remove();
                     onComplete();
                 }
             }
@@ -164,69 +156,13 @@ export default class Animation {
         this.requestID = animate();
     }
 
-    endAnimation(onComplete) {
+    append() {
         document.body.appendChild(this.renderer.domElement);
-
-        let scaleFactor = 0.99;
-        let phase = 'scaleUp';
-        // let phase = 'explode';
-        this.heartGroup.scale.set(scaleFactor, scaleFactor, scaleFactor);
-    
-        const animate = () => {
-            this.requestID = requestAnimationFrame(animate);
-    
-            if (phase === 'scaleUp') {
-                scaleFactor += 0.01;
-                this.heartGroup.scale.set(scaleFactor, scaleFactor, scaleFactor);
-    
-                if (scaleFactor >= 1.0) {
-                    // 切換到碎裂階段
-                    phase = 'explode';
-    
-                    // 將心拆成左右
-                    this.leftGroup = new THREE.Group();
-                    this.rightGroup = new THREE.Group();
-    
-                    this.heartGroup.children.forEach(cube => {
-                        if (cube.position.x < 0) {
-                            this.leftGroup.add(cube);
-                        } else {
-                            this.rightGroup.add(cube);
-                        }
-                    });
-    
-                    this.scene.remove(this.heartGroup);
-                    this.scene.add(this.leftGroup);
-                    this.scene.add(this.rightGroup);
-                }
-            } else if (phase === 'explode') {
-                // 🧨 你可以改成掉落式碎裂 or 旋轉碎裂
-    
-                this.leftGroup.children.forEach(cube => {
-                    cube.rotation.z += 0.05;
-                    cube.position.x -= 0.3;
-                    cube.position.y += 0.2;
-                });
-    
-                this.rightGroup.children.forEach(cube => {
-                    cube.position.x += 0.3;
-                    cube.position.y += 0.2;
-                });
-    
-                // 判斷是否已經飛開夠遠
-                if (this.leftGroup.children[0].position.y > 15) {
-                    cancelAnimationFrame(this.requestID);
-                    if (onComplete) {
-                        onComplete(); // ✅ 結束時呼叫
-                        document.body.removeChild(this.renderer.domElement);
-                    }
-                }
-            }
-    
-            this.renderer.render(this.scene, this.camera);
-        };
-    
-        animate();
+        document.body.appendChild(this.infoElement);
     }
-    
+
+    remove() {
+        document.body.removeChild(this.renderer.domElement);
+        document.body.removeChild(this.infoElement);
+    }
 }
